@@ -22,6 +22,7 @@ https://gist.github.com/k-nowicki/5379272
 
 
 """
+from __future__ import print_function, unicode_literals
 from enum import Enum
 from time import sleep
 import serial
@@ -226,12 +227,12 @@ class KoradSerial(object):
             self.port = serial.Serial(port, 9600, timeout=1)
 
         def read_character(self):
-            c = self.port.read(1)
+            c = self.port.read(1).decode('ascii')
             if self.debug:
                 if len(c) > 0:
-                    print "read: {0} = '{1}'".format(ord(c), c)
+                    print("read: {0} = '{1}'".format(ord(c), c))
                 else:
-                    print "read: timeout"
+                    print("read: timeout")
             return c
 
         def read_string(self, fixed_length=None):
@@ -253,9 +254,9 @@ class KoradSerial(object):
 
         def send(self, text):
             if self.debug:
-                print "_send: ", text
+                print("_send: ", text)
             sleep(0.1)
-            self.port.write(text)
+            self.port.write(text.encode('ascii'))
 
         def send_receive(self, text, fixed_length=None):
             self.send(text)
