@@ -11,6 +11,9 @@ class KoradSerialTest(TestCase):
         self.device = KoradSerial('/dev/tty.usbmodemfd121', True)
         self.overrideSkippedTests = False
 
+    def tearDown(self):
+        self.device.close()    
+
     def _pause(self, delay=1):
         """ Give the power supply time to digest the commands.
 
