@@ -24,9 +24,10 @@ class KoradSerialTest(TestCase):
     def test_beep(self):
         """ Test the BEEP command.
 
-        According to what I've read on the Internet, and confirmed by my trials, is that BEEP0 doesn't work.
+        According to what I've read on the Internet,
+        and confirmed by my trials, is that BEEP0 doesn't work.
 
-        Thus this test is useless.
+        Thus, this test is useless.
 
         :return:
         """
@@ -46,7 +47,8 @@ class KoradSerialTest(TestCase):
     def test_channel1(self):
         """ Test Channel 1's functionality.
 
-        This test assumes a small load (perhaps 100 ohm) is on the power supply so a small amount of current is drawn.
+        This test assumes a small load (perhaps 100 ohm) is
+        on the power supply so a small amount of current is drawn.
         """
         channel = self.device.channels[0]
 
@@ -62,13 +64,15 @@ class KoradSerialTest(TestCase):
         self.assertAlmostEqual(12.34, channel.voltage, 2)
         self.assertAlmostEqual(1.234, channel.current, 3)
 
-        # Set a different current and voltage to ensure that we're not reading old data.
+        # Set a different current and voltage
+        # to ensure that we're not reading old data.
         channel.voltage = 3.30
         channel.current = 0.123
         self.assertAlmostEqual(3.30, channel.voltage, 2)
         self.assertAlmostEqual(0.123, channel.current, 3)
 
-        # Turn on the output and ensure that current is flowing across the small load.
+        # Turn on the output and
+        # ensure that current is flowing across the small load.
         self.device.output.on()
         self._pause()
         self.assertAlmostEqual(3.30, channel.output_voltage, 2)
@@ -82,7 +86,8 @@ class KoradSerialTest(TestCase):
         Ha! Just kidding. This is a stub.
 
         It appears that there is no command to alter the lock state.
-        While connected to a serial line and processing commands, the power supply is in a lock state.
+        While connected to a serial line and processing commands,
+        the power supply is in a lock state.
         """
         if not self.overrideSkippedTests:
             return
@@ -97,9 +102,11 @@ class KoradSerialTest(TestCase):
         *   Second, one must set the desired voltage and current limit.
         *   Third, one must save the memory with a `save()` command.
 
-        Recalling a memory setting simply requires calling the `recall()` command.
+        Recalling a memory setting
+        simply requires calling the `recall()` command.
 
-        This goes through the test twice with different values to ensure what is read isn't old data.
+        This goes through the test twice with different values
+        to ensure what is read isn't old data.
         """
         channel = self.device.channels[0]
         m1 = self.device.memories[0]
@@ -194,7 +201,8 @@ class KoradSerialTest(TestCase):
     def test_ocp(self):
         """ Test Over Current Protection
 
-        There's no way to get feedback on these, so simply ensure that no exceptions are thrown.
+        There's no way to get feedback on these,
+        so simply ensure that no exceptions are thrown.
         """
         self.device.over_current_protection.on()
         self._pause()
@@ -203,7 +211,8 @@ class KoradSerialTest(TestCase):
     def test_ovp(self):
         """ Test Over Voltage Protection
 
-        There's no way to get feedback on these, so simply ensure that no exceptions are thrown.
+        There's no way to get feedback on these,
+        so simply ensure that no exceptions are thrown.
         """
         self.device.over_voltage_protection.on()
         self._pause()
@@ -226,7 +235,7 @@ class KoradSerialTest(TestCase):
         """ Test the TRACK commands.
 
         **NOTE:** The tests here are hypothetical.
-        I don't have a multi-channel power supply to actually test this against.
+        I don't have a multichannel power supply to actually test this against.
         """
         if not self.overrideSkippedTests:
             return
