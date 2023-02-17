@@ -110,7 +110,9 @@ class Status(object):
         return "{0}".format(self.raw)
 
     def __str__(self):
-        return "Channel 1: {0}, Channel 2: {1}, Tracking: {2}, Beep: {3}, Lock: {4}, Output: {5}".format(
+        message = "Channel 1: {0}, Channel 2: {1}, Tracking: {2}, " \
+                  "Beep: {3}, Lock: {4}, Output: {5}"
+        return message.format(
             self.channel1.name,
             self.channel2.name,
             self.tracking.name,
@@ -151,7 +153,9 @@ class KoradSerial(object):
 
         @property
         def current(self):
-            result = self.__serial.send_receive("ISET{0}?".format(self.number), fixed_length=6)
+            result = self.__serial.send_receive(
+                "ISET{0}?".format(self.number), fixed_length=6
+            )
             # There's a bug that return a 6th character of previous output.
             # This has to be read and discarded
             # otherwise it will be prepended to the next output
@@ -163,7 +167,11 @@ class KoradSerial(object):
 
         @property
         def voltage(self):
-            return float_or_none(self.__serial.send_receive("VSET{0}?".format(self.number), fixed_length=5))
+            return float_or_none(
+                self.__serial.send_receive(
+                    "VSET{0}?".format(self.number), fixed_length=5
+                )
+            )
 
         @voltage.setter
         def voltage(self, value):
@@ -176,7 +184,9 @@ class KoradSerial(object):
             :return: Amperes
             :rtype: float or None
             """
-            result = self.__serial.send_receive("IOUT{0}?".format(self.number), fixed_length=5)
+            result = self.__serial.send_receive(
+                "IOUT{0}?".format(self.number), fixed_length=5
+            )
             return float_or_none(result)
 
         @property
@@ -186,7 +196,9 @@ class KoradSerial(object):
             :return: Volts
             :rtype: float or None
             """
-            result = self.__serial.send_receive("VOUT{0}?".format(self.number), fixed_length=5)
+            result = self.__serial.send_receive(
+                "VOUT{0}?".format(self.number), fixed_length=5
+            )
             return float_or_none(result)
 
     class Memory(object):
@@ -276,16 +288,24 @@ class KoradSerial(object):
 
         # Channels: adjust voltage and current,
         # discover current output voltage.
-        self.channels = [KoradSerial.Channel(self.__serial, i) for i in range(1, 3)]
+        self.channels = [
+            KoradSerial.Channel(self.__serial, i) for i in range(1, 3)
+        ]
 
         # Memory recall/save buttons 1 through 5
-        self.memories = [KoradSerial.Memory(self.__serial, i) for i in range(1, 6)]
+        self.memories = [
+            KoradSerial.Memory(self.__serial, i) for i in range(1, 6)
+        ]
 
         # Second column buttons
         self.beep = KoradSerial.OnOffButton(self.__serial, "BEEP1", "BEEP0")
         self.output = KoradSerial.OnOffButton(self.__serial, "OUT1", "OUT0")
-        self.over_current_protection = KoradSerial.OnOffButton(self.__serial, "OCP1", "OCP0")
-        self.over_voltage_protection = KoradSerial.OnOffButton(self.__serial, "OVP1", "OVP0")
+        self.over_current_protection = KoradSerial.OnOffButton(
+            self.__serial, "OCP1", "OCP0"
+        )
+        self.over_voltage_protection = KoradSerial.OnOffButton(
+            self.__serial, "OVP1", "OVP0"
+        )
 
     def __enter__(self):
         """ See documentation for Python's ``with`` command.
