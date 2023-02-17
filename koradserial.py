@@ -9,8 +9,8 @@ port automatically:
 from koradserial import KoradSerial
 
 with KoradSerial('/dev/tty.usbmodemfd121') as device:
-    print "Model: ", device.model
-    print "Status: ", device.status
+    print("Model: ", device.model)
+    print("Status: ", device.status)
 
 LICENSE: MIT
 
