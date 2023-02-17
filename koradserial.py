@@ -1,9 +1,10 @@
 """ Serial communication with Korad KA3xxxP power supplies.
 
-The intent is to give easy access to the power supply as Python objects, eliminating the need to know
-special codes.
+The intent is to give easy access to the power supply as Python objects,
+eliminating the need to know special codes.
 
-The object supports the python `with` statement to release the serial port automatically:
+The object supports the python `with` statement to release the serial
+port automatically:
 
 from koradserial import KoradSerial
 
@@ -33,7 +34,8 @@ __all__ = ['KoradSerial', 'ChannelMode', 'OnOffState', 'Tracking']
 class ChannelMode(Enum):
     """ Represents channel modes.
 
-    These values should correspond to the values returned by the ``STATUS?`` command.
+    These values should correspond to the values returned
+    by the ``STATUS?`` command.
     """
     constant_current = 0
     constant_voltage = 1
@@ -49,9 +51,10 @@ class OnOffState(Enum):
 
 
 class Tracking(Enum):
-    """ Tracking state for a multi-channel power supply.
+    """ Tracking state for a multichannel power supply.
 
-    These values should correspond to the values returned by the ``STATUS?`` command.
+    These values should correspond to the values returned
+    by the ``STATUS?`` command.
 
     There seems to be conflicting information about these values.
 
@@ -61,7 +64,7 @@ class Tracking(Enum):
     *   2 - parallel
     *   3 - symmetric
 
-    However, I don't have a multi-channel power supply to test these.
+    However, I don't have a multichannel power supply to test these.
     """
     independent = 0
     series = 1
@@ -78,14 +81,14 @@ class Status(object):
     Taken from http://www.eevblog.com/forum/testgear/korad-ka3005p-io-commands/
 
     Contents 8 bits in the following format
-        Bit     Item        Description
-        0       CH1         0=CC mode, 1=CV mode
-        1       CH2         0=CC mode, 1=CV mode
-        2, 3    Tracking    00=Independent, 01=Tracking series,11=Tracking parallel
-        4       Beep        0=Off, 1=On
-        5       Lock        0=Lock, 1=Unlock
-        6       Output      0=Off, 1=On
-        7       N/A         N/A
+        Bit   Item      Description
+        0     CH1       0=CC mode, 1=CV mode
+        1     CH2       0=CC mode, 1=CV mode
+        2, 3  Tracking  00=Independent,01=Tracking series,11=Tracking parallel
+        4     Beep      0=Off, 1=On
+        5     Lock      0=Lock, 1=Unlock
+        6     Output    0=Off, 1=On
+        7     N/A       N/A
     """
 
     def __init__(self, status):
@@ -128,7 +131,9 @@ def float_or_none(value):
 
 
 class KoradSerial(object):
-    """ Wrapper for communicating with a programmable KoradSerial KA3xxxxP power supply as a serial interface.
+    """
+    Wrapper for communicating with a programmable KoradSerial KA3xxxxP
+    power supply as a serial interface.
     """
 
     class Channel(object):
@@ -148,7 +153,8 @@ class KoradSerial(object):
         def current(self):
             result = self.__serial.send_receive("ISET{0}?".format(self.number), fixed_length=6)
             # There's a bug that return a 6th character of previous output.
-            # This has to be read and discarded otherwise it will be prepended to the next output
+            # This has to be read and discarded
+            # otherwise it will be prepended to the next output
             return float_or_none(result[:5])
 
         @current.setter
@@ -165,7 +171,7 @@ class KoradSerial(object):
 
         @property
         def output_current(self):
-            """ Retrieve this channel's current current output.
+            """ Retrieve this channel's current output.
 
             :return: Amperes
             :rtype: float or None
@@ -175,7 +181,7 @@ class KoradSerial(object):
 
         @property
         def output_voltage(self):
-            """ Retrieve this channel's current current voltage.
+            """ Retrieve this channel's voltage output.
 
             :return: Volts
             :rtype: float or None
@@ -238,7 +244,8 @@ class KoradSerial(object):
         def read_string(self, fixed_length=None):
             """ Read a string.
 
-            It appears that the KoradSerial PSU returns zero-terminated strings.
+            It appears that the KoradSerial PSU returns
+            zero-terminated strings.
 
             :return: str
             """
@@ -267,7 +274,8 @@ class KoradSerial(object):
 
         self.__serial = KoradSerial.Serial(port, debug)
 
-        # Channels: adjust voltage and current,  discover current output voltage.
+        # Channels: adjust voltage and current,
+        # discover current output voltage.
         self.channels = [KoradSerial.Channel(self.__serial, i) for i in range(1, 3)]
 
         # Memory recall/save buttons 1 through 5
@@ -284,15 +292,15 @@ class KoradSerial(object):
         """
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, _type, value, traceback):
         """ See documentation for Python's ``with`` command.
         """
         self.close()
         return False
 
-    # ################################################################################
+    # ##################################################################
     # Serial operations
-    # ################################################################################
+    # ##################################################################
 
     @property
     def is_open(self):
@@ -309,9 +317,9 @@ class KoradSerial(object):
         """ Open the serial port """
         self.__serial.port.open()
 
-    # ################################################################################
+    # ##################################################################
     # Power supply operations
-    # ################################################################################
+    # ##################################################################
 
     @property
     def model(self):
