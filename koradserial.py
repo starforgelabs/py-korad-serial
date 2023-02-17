@@ -22,7 +22,7 @@ https://gist.github.com/k-nowicki/5379272
 
 
 """
-from __future__ import print_function, unicode_literals
+
 from enum import Enum
 from time import sleep
 import serial
